@@ -1,0 +1,52 @@
+{
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "description": "The purpose of this API is to provide an example of how a Golang API could be constructed.",
+    "title": "Playground API.",
+    "version": "0.0.1"
+  },
+  "paths": {
+    "/api/v1/ping": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "schemes": [
+          "http",
+          "https"
+        ],
+        "tags": [
+          "monitor"
+        ],
+        "summary": "Returns a pong response if the app is running.",
+        "operationId": "ping",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/pingResponse"
+          }
+        }
+      }
+    }
+  },
+  "responses": {
+    "pingResponse": {
+      "description": "A PingResponse is a response to a ping.",
+      "headers": {
+        "Message": {
+          "type": "string",
+          "description": "The message returned"
+        }
+      }
+    }
+  }
+}
