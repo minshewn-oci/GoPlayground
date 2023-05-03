@@ -3,16 +3,17 @@ package router
 import (
 	"GoPlayground/internal/api/v1/router"
 	"GoPlayground/internal/factory"
-	"GoPlayground/pkg/interfaces"
+	"GoPlayground/pkg/adapters"
 )
 
 type Registrar struct {
 	HandlerFactory factory.IHandlerFactory
+	RouterGroup    adapters.IGinWrapper
 }
 
-func (registrar *Registrar) RegisterGroup(engine interfaces.RouterGroup) interfaces.RouterGroup {
-	v1Registrar := router.Registrar{HandlerFactory: registrar.HandlerFactory}
-	api := engine.Group("api")
-	v1Registrar.RegisterGroup(api)
-	return api
+func (registrar *Registrar) RegisterGroup() {
+	api := registrar.RouterGroup.Group("api")
+	wrapper := adapters.NewGinWrapperWithRouterGroup(api)
+	v1Registrar := router.Registrar{HandlerFactory: registrar.HandlerFactory, RouterGroup: wrapper}
+	v1Registrar.RegisterGroup()
 }

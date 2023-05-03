@@ -2,21 +2,21 @@ package router
 
 import (
 	"GoPlayground/internal/factory"
-	"GoPlayground/pkg/interfaces"
+	"GoPlayground/pkg/adapters"
 	"github.com/gin-gonic/gin"
 )
 
 type Registrar struct {
 	HandlerFactory factory.IHandlerFactory
+	RouterGroup    adapters.IGinWrapper
 }
 
-func (registrar *Registrar) RegisterGroup(group interfaces.RouterGroup) interfaces.RouterGroup {
-	group = group.Group("v1")
+func (registrar *Registrar) RegisterGroup() {
+	group := registrar.RouterGroup.Group("v1")
 	registrar.registerEndpoints(group)
-	return group
 }
 
-func (registrar *Registrar) registerEndpoints(group interfaces.RouterGroup) {
+func (registrar *Registrar) registerEndpoints(group adapters.IGinWrapper) {
 	// swagger:route GET /api/v1/ping monitor ping
 	//
 	// Returns a pong response if the app is running.

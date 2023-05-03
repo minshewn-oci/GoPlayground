@@ -16,20 +16,23 @@ package main
 import (
 	"GoPlayground/internal/api/router"
 	"GoPlayground/internal/factory"
+	"GoPlayground/pkg/adapters"
 	"fmt"
 	"github.com/gin-gonic/gin"
 )
 
-type RouteRegistrar[T any] interface {
-	RegisterGroup(router T) T
+type RouteRegistrar interface {
+	RegisterGroup()
 }
 
 func main() {
 	r := gin.Default()
+	var adapter adapters.IGinWrapper
+	adapter = adapters.NewGinWrapperWithEngine(r)
 	var handlerFactory factory.IHandlerFactory
 	handlerFactory = new(factory.HandlerFactory)
-	apiRegistrar := router.Registrar{HandlerFactory: handlerFactory}
-	apiRegistrar.RegisterGroup(r)
+	apiRegistrar := router.Registrar{HandlerFactory: handlerFactory, RouterGroup: adapter}
+	apiRegistrar.RegisterGroup()
 	r.Static("/files/openapi-spec/", "api/openapi-spec")
 	r.Static("/docs", "docs")
 	if err := r.Run(":3000"); err != nil {
